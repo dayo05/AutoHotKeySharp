@@ -17,7 +17,7 @@ namespace AutoHotKeyCSharp.Actions
         public static void KeyUp(uint vk)
             => keybd_event(vk, 0, 0x02, 0);
         public static void KeyDown(PressedKeys k)
-        {
+    {
             //TODO
         }
         public static void ShowMessage(string message, string title = " ", MessageBoxIcon icon = MessageBoxIcon.None)
