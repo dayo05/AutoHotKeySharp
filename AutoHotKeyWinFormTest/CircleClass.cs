@@ -12,8 +12,7 @@ namespace AutoHotKeyWinFormTest
         [Key(special: (long)SpecialKeyList.Control)]
         public static void Hello()
         {
-            Console.WriteLine("Test");
-            //MessageBox.Show("Test Complated!!");
+            //Execute.ShowMessage("Test Complated!!");
         }
         [Key(special: (long)SpecialKeyList.Alt)]
         public static void AltPressedLol()
@@ -28,15 +27,18 @@ namespace AutoHotKeyWinFormTest
         [Key(special: (long)SpecialKeyList.Win, ch: (long)EngCharKeyList.D)]
         public static void GotoBackGround()
         {
-            Console.WriteLine("asdf");
-            Thread.Sleep(500);
-            Execute.KeyDown((uint)Keys.ControlKey);
-            Execute.KeyDown((uint)Keys.LMenu);
-            Execute.KeyDown((uint)Keys.Escape);
-            Execute.KeyUp((uint)Keys.Escape);
-            Execute.KeyUp((uint)Keys.LMenu);
-            Execute.KeyUp((uint)Keys.ControlKey);
+            Thread.Sleep(100);
+            Console.WriteLine("Win + D Pressed");
+            Execute.KeyDown((byte)Keys.LControlKey);
+            Execute.KeyDown((byte)Keys.LMenu);
+            Execute.KeyDown((byte)Keys.Escape);
+            Thread.Sleep(10);
+            Execute.KeyUp((byte)Keys.Escape);
+            Execute.KeyUp((byte)Keys.LMenu);
+            Execute.KeyUp((byte)Keys.LControlKey);
         }
+        [Key(special: (long)SpecialKeyList.Control | (long)SpecialKeyList.Alt | (long)SpecialKeyList.F12)]
+        public static void FinishProcess()
+            => Application.Exit();
     }
-
 }

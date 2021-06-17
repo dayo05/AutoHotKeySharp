@@ -33,10 +33,6 @@ namespace AutoHotKeyCSharp
         }
 
         // Pre-defined const number
-        const int VK_SHIFT = 0x10;
-        const int VK_CONTROL = 0x11;
-        const int VK_MENU = 0x12;
-
         const int WH_KEYBOARD_LL = 13;
         const int WM_KEYDOWN = 0x100;
         const int WM_KEYUP = 0x101;

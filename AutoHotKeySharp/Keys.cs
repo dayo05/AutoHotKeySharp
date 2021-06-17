@@ -37,7 +37,6 @@ namespace AutoHotKeyCSharp
         PadSeven = 0b_0000_1000_0000_0000_0000_0000,
         PadEight = 0b_0001_0000_0000_0000_0000_0000,
         PadNine = 0b_0010_0000_0000_0000_0000_0000,
-
     }
     public enum SpecialKeyList : long
     {
@@ -67,12 +66,12 @@ namespace AutoHotKeyCSharp
         F11 = 0b_0100_0000_0000_0000_0000_0000,
         F12 = 0b_1000_0000_0000_0000_0000_0000,
         Tab = 0b_0001_0000_0000_0000_0000_0000_0000,
-        Del = 0b_0010_0000_0000_0000_0000_0000_0000,
+        Delete = 0b_0010_0000_0000_0000_0000_0000_0000,
         PrintScreen = 0b_0100_0000_0000_0000_0000_0000_0000,
         Insert = 0b_1000_0000_0000_0000_0000_0000_0000,
         Esc = 0b_0001_0000_0000_0000_0000_0000_0000_0000,
-        Return = 0b_0010_0000_0000_0000_0000_0000_0000_0000,
-        BackSpace = 0b_0100_0000_0000_0000_0000_0000_0000_0000
+        Enter = 0b_0010_0000_0000_0000_0000_0000_0000_0000,
+        BackSpace = 0b_0100_0000_0000_0000_0000_0000_0000_0000,
     }
     public enum EngCharKeyList : long
     {
@@ -111,6 +110,8 @@ namespace AutoHotKeyCSharp
         Dash = 0b_0000_0000_0000_0000_0000_0010, // -
         Dot = 0b_0000_0000_0000_0000_0000_0100, //.
         Slash = 0b_0000_0000_0000_0000_0000_1000, // /
+        Backtick = 0b_0000_0000_0000_0000_0001_0000, // `
+        Equal
     }
     public class BaseKeys
     {
@@ -145,6 +146,18 @@ namespace AutoHotKeyCSharp
             this.other = new((long)other);
             this.editional = new(); //Not Supported Yet
         }
+        public void AddKey(long n, string type)
+        {
+            if (type == "number")
+                AddKey((NumberKeyList)n);
+            else if (type == "special")
+                AddKey((SpecialKeyList)n);
+            else if (type == "engchar")
+                AddKey((EngCharKeyList)n);
+            else if (type == "other")
+                AddKey((OtherCharKeyList)n);
+            else throw new ArgumentException("not supported argument: " + type);
+        }
         public void AddKey(NumberKeyList n)
             => number.key |= (long)n;
         public void AddKey(SpecialKeyList n)
@@ -153,34 +166,58 @@ namespace AutoHotKeyCSharp
             => ch.key |= (long)n;
         public void AddKey(OtherCharKeyList n)
             => ch.key |= (long)n;
+        public void RemoveKey(long n, string type)
+        {
+            if (type == "number")
+                RemoveKey((NumberKeyList)n);
+            else if (type == "special")
+                RemoveKey((SpecialKeyList)n);
+            else if (type == "engchar")
+                RemoveKey((EngCharKeyList)n);
+            else if (type == "other")
+                RemoveKey((OtherCharKeyList)n);
+            else throw new ArgumentException("not supported argument: " + type);
+        }
         public void RemoveKey(NumberKeyList n)
         {
-            if ((number.key | (long)n) == (long)n)
+            if ((number.key & (long)n) == (long)n)
                 number.key -= (long)n;
         }
         public void RemoveKey(SpecialKeyList n)
         {
-            if ((special.key | (long)n) == (long)n)
+            if ((special.key & (long)n) == (long)n)
                 special.key -= (long)n;
         }
         public void RemoveKey(EngCharKeyList n)
         {
-            if ((ch.key | (long)n) == (long)n)
+            if ((ch.key & (long)n) == (long)n)
                 ch.key -= (long)n;
         }
         public void RemoveKey(OtherCharKeyList n)
         {
-            if ((other.key | (long)n) == (long)n)
+            if ((other.key & (long)n) == (long)n)
                 other.key -= (long)n;
         }
+        public bool ExistKey(long n, string type)
+        {
+            if (type == "number")
+                return ExistKey((NumberKeyList)n);
+            else if (type == "special")
+                return ExistKey((SpecialKeyList)n);
+            else if (type == "engchar")
+                return ExistKey((EngCharKeyList)n);
+            else if (type == "other")
+                return ExistKey((OtherCharKeyList)n);
+            else throw new ArgumentException("not supported argument: " + type);
+        }
         public bool ExistKey(NumberKeyList n)
-            => (number.key | (long)n) == (long)n;
+            => (number.key & (long)n) == (long)n;
         public bool ExistKey(SpecialKeyList n)
-            => (special.key | (long)n) == (long)n;
+            => (special.key & (long)n) == (long)n;
         public bool ExistKey(EngCharKeyList n)
-            => (ch.key | (long)n) == (long)n;
+            => (ch.key & (long)n) == (long)n;
         public bool ExistKey(OtherCharKeyList n)
-            => (other.key | (long)n) == (long)n;
+            => (other.key & (long)n) == (long)n;
         public override int GetHashCode()
             => number.GetHashCode() & special.GetHashCode() & ch.GetHashCode() & other.GetHashCode();
         public override bool Equals(object obj)

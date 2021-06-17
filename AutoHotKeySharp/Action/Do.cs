@@ -7,17 +7,21 @@ namespace AutoHotKeyCSharp.Actions
     {
         [DllImport("user32.dll")]
         public static extern void keybd_event(uint vk, uint scan, uint flags, uint extraInfo);
-        public static void ClickKey(uint vk)
+        public static void ClickKey(byte vk)
         {
-            keybd_event(vk, 0, 0x00, 0);
-            keybd_event(vk, 0, 0x02, 0);
+            KeyDown(vk);
+            KeyUp(vk);
         }
-        public static void KeyDown(uint vk)
-            => keybd_event(vk, 0, 0x00, 0);
-        public static void KeyUp(uint vk)
-            => keybd_event(vk, 0, 0x02, 0);
+        public static void KeyDown(byte vk)
+        {
+            keybd_event(vk, 0, 0x01, 0);
+        }
+        public static void KeyUp(byte vk)
+        {
+            keybd_event(vk, 0, 0x03, 0);
+        }
         public static void KeyDown(PressedKeys k)
-    {
+        {
             //TODO
         }
         public static void ShowMessage(string message, string title = " ", MessageBoxIcon icon = MessageBoxIcon.None)
